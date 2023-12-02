@@ -1,8 +1,7 @@
 import 'package:sign_in_bloc/domain/artist/repository/artist_repository.dart';
 import 'package:sign_in_bloc/infrastructure/mappers/artist_mapper.dart';
 import 'package:sign_in_bloc/infrastructure/services/network_manager.dart';
-import 'package:sign_in_bloc/result.dart';
-
+import 'package:sign_in_bloc/core/result.dart';
 import '../../../domain/artist/artist.dart';
 
 class ArtistRepositoryImpl extends ArtistRepository {

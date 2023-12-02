@@ -45,6 +45,7 @@ class HomePage extends StatelessWidget {
                           SizedBox(width: 10),
                         ],
                       ),
+                      //PROMOTIONAL BANNER ENTITY
                       const PromotionalBanner(
                         imgPath:
                             'https://aqustico.com/wp-content/uploads/2023/08/Banners-web_Mesa-de-trabajo-1-1.png',
