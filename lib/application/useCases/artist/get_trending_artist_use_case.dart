@@ -1,5 +1,4 @@
-import 'package:sign_in_bloc/domain/artist/artist.dart';
-
+import '../../../domain/artist/artist.dart';
 import '../../../domain/artist/repository/artist_repository.dart';
 import '../../../result.dart';
 
