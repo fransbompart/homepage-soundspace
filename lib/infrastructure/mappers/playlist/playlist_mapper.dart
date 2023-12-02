@@ -1,4 +1,4 @@
-import '../../domain/playlist/playlist.dart';
+import '../../../domain/playlist/playlist.dart';
 
 class PlaylistMapper {
   static Playlist fromJson(Map<String, dynamic> json) {

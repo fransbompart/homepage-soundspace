@@ -10,27 +10,27 @@ class TrendingsLoading extends TrendingsState {
 }
 
 class TrendingsLoaded extends TrendingsState {
-  final List<Artist> trendingArtist;
-  final List<Album> trendingAlbum;
+  final List<Artist> trendingArtists;
+  final List<Album> trendingAlbums;
   final PromotionalBanner promotionalBanner;
-  final List<Playlist> playlists;
-  final List<Song> songs;
+  final List<Playlist> trendingPlaylists;
+  final List<Song> trendingSongs;
 
-  TrendingsLoaded({
-    required this.trendingArtist,
-    required this.trendingAlbum,
+  const TrendingsLoaded({
+    required this.trendingArtists,
+    required this.trendingAlbums,
     required this.promotionalBanner,
-    required this.playlists,
-    required this.songs,
+    required this.trendingPlaylists,
+    required this.trendingSongs,
   });
 
   @override
   List<Object?> get props => [
-        trendingArtist,
-        trendingAlbum,
+        trendingArtists,
+        trendingAlbums,
         promotionalBanner,
-        playlists,
-        songs,
+        trendingPlaylists,
+        trendingSongs,
       ];
 }
 

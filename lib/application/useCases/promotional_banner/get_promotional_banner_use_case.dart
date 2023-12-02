@@ -1,6 +1,6 @@
 import '../../../domain/promotional_banner/promotional_banner.dart';
 import '../../../domain/promotional_banner/repository/promotional_banner_repository.dart';
-import '../../../result.dart';
+import '../../../commons/result.dart';
 
 class GetPromotionalBannerUseCase {
   final PromotionalBannerRepository promotionalBannerRepository;

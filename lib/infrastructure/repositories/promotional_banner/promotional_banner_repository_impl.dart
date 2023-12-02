@@ -1,8 +1,8 @@
 import '../../../domain/promotional_banner/promotional_banner.dart';
 import '../../../domain/promotional_banner/repository/promotional_banner_repository.dart';
-import '../../mappers/promotional_banner_mapper.dart';
+import '../../mappers/promotionalBanner/promotional_banner_mapper.dart';
 import '../../services/network_manager.dart';
-import '../../../result.dart';
+import '../../../commons/result.dart';
 
 class PromotionalBannerImpl extends PromotionalBannerRepository {
   final NetworkManager networkManager = NetworkManager(

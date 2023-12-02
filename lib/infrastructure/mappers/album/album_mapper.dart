@@ -1,4 +1,4 @@
-import '../../domain/album/album.dart';
+import '../../../domain/album/album.dart';
 
 class AlbumMapper {
   static Album fromJson(Map<String, dynamic> json) {

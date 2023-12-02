@@ -1,11 +1,11 @@
 import '../../../domain/song/song.dart';
 import '../../../domain/song/repository/song_repository.dart';
-import '../../../result.dart';
+import '../../../commons/result.dart';
 
-class GetSongUseCase {
+class GetTrendingSongsUseCase {
   final SongRepository songRepository;
 
-  GetSongUseCase({required this.songRepository});
+  GetTrendingSongsUseCase({required this.songRepository});
 
   Future<Result<List<Song>>> execute() async {
     return await songRepository.getSongs();

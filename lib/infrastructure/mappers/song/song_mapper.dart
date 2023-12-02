@@ -1,12 +1,12 @@
-import '../../domain/song/song.dart';
+import '../../../domain/song/song.dart';
 
 class SongMapper {
   static Song fromJson(Map<String, dynamic> json) {
     return Song(
-      id: json['codigo_cancion'],
+      id: json['codigo'],
       name: json['nombre'],
       duration: json['duracion'],
-      imageURL: json['referencia_imagen'],
+      imageURL: json['referencia'],
     );
   }
 

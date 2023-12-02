@@ -1,12 +1,12 @@
 import 'package:sign_in_bloc/domain/album/album.dart';
 
 import '../../../domain/album/repository/album_repository.dart';
-import '../../../result.dart';
+import '../../../commons/result.dart';
 
-class GetTrendingAlbumUseCase {
+class GetTrendingAlbumsUseCase {
   final AlbumRepository albumRepository;
 
-  GetTrendingAlbumUseCase({required this.albumRepository});
+  GetTrendingAlbumsUseCase({required this.albumRepository});
 
   Future<Result<List<Album>>> execute() async {
     return await albumRepository.getTrendingAlbums();

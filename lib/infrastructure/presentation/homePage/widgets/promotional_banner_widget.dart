@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 
-class PromotionalBanner extends StatefulWidget {
-  final String imgPath;
+import '../../../../domain/promotional_banner/promotional_banner.dart';
 
-  const PromotionalBanner({super.key, required this.imgPath});
+class PromotionalBannerWidget extends StatefulWidget {
+  final PromotionalBanner banner;
+
+  const PromotionalBannerWidget({super.key, required this.banner});
 
   @override
-  State<PromotionalBanner> createState() => _PromotionalBannersState();
+  State<PromotionalBannerWidget> createState() =>
+      _PromotionalBannerWidgetState();
 }
 
-class _PromotionalBannersState extends State<PromotionalBanner> {
+class _PromotionalBannerWidgetState extends State<PromotionalBannerWidget> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -18,7 +21,7 @@ class _PromotionalBannersState extends State<PromotionalBanner> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
           child: Image.network(
-            widget.imgPath,
+            widget.banner.imgPath,
             width: size.width * 0.92,
             height: 200,
             fit: BoxFit.cover,

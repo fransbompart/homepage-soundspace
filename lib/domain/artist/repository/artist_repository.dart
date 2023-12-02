@@ -1,4 +1,4 @@
-import '../../../result.dart';
+import '../../../commons/result.dart';
 import '../artist.dart';
 
 abstract class ArtistRepository {

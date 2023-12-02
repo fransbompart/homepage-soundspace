@@ -1,8 +1,7 @@
 import 'package:sign_in_bloc/domain/album/repository/album_repository.dart';
-import 'package:sign_in_bloc/infrastructure/mappers/album_mapper.dart';
+import 'package:sign_in_bloc/infrastructure/mappers/album/album_mapper.dart';
 import 'package:sign_in_bloc/infrastructure/services/network_manager.dart';
-import 'package:sign_in_bloc/result.dart';
-
+import 'package:sign_in_bloc/commons/result.dart';
 import '../../../domain/album/album.dart';
 
 class AlbumRepositoryImpl extends AlbumRepository {

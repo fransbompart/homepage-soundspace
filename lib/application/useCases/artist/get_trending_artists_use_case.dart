@@ -1,11 +1,11 @@
 import '../../../domain/artist/artist.dart';
 import '../../../domain/artist/repository/artist_repository.dart';
-import '../../../result.dart';
+import '../../../commons/result.dart';
 
-class GetTrendingArtistUseCase {
+class GetTrendingArtistsUseCase {
   final ArtistRepository artistRepository;
 
-  GetTrendingArtistUseCase({required this.artistRepository});
+  GetTrendingArtistsUseCase({required this.artistRepository});
 
   Future<Result<List<Artist>>> execute() async {
     return await artistRepository.getTrendingArtists();
