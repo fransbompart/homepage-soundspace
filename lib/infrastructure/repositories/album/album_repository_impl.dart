@@ -5,9 +5,9 @@ import 'package:sign_in_bloc/commons/result.dart';
 import '../../../domain/album/album.dart';
 
 class AlbumRepositoryImpl extends AlbumRepository {
-  final NetworkManager networkManager = NetworkManager(
-      apiPath:
-          'https://soundspace-api-production.up.railway.app/api/'); //mejorar esto
+  final NetworkManager networkManager;
+
+  AlbumRepositoryImpl({required this.networkManager}); //mejorar esto
 
   @override
   Future<Result<List<Album>>> getTrendingAlbums() async {

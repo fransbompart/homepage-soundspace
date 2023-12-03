@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import '../../../../domain/artist/artist.dart';
+import '../../config/router/app_router.dart';
 
 class ArtistsCarousel extends StatelessWidget {
   final List<Artist> artists;
@@ -34,10 +36,14 @@ class _ArtistCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final getIt = GetIt.instance;
+    final AppNavigator appNavigator = getIt.get<AppNavigator>();
     final size = MediaQuery.of(context).size;
     return Column(children: [
       GestureDetector(
-        onTap: () async {},
+        onTap: () {
+          appNavigator.navigateTo('/artist');
+        },
         child: Material(
           elevation: 5.0,
           color: Colors.transparent,

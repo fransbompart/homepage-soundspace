@@ -3,14 +3,14 @@ import 'package:dio/dio.dart';
 import '../../commons/result.dart';
 
 class NetworkManager {
-  final Dio dio = Dio();
-  final String apiPath;
-
-  NetworkManager({required this.apiPath});
+  final Dio dio = Dio(BaseOptions(
+    baseUrl:
+        'https://soundspace-api-production.up.railway.app/api/', //TODO:mejorar esto con las .env
+  ));
 
   Future<Result<dynamic>> getRequest(String path) async {
     try {
-      final response = await dio.get(apiPath + path);
+      final response = await dio.get(path);
       return Result(value: response, error: null);
     } catch (e) {
       return Result(value: null, error: Error());
@@ -19,7 +19,7 @@ class NetworkManager {
 
   Future<Result<dynamic>> postRequest(String path, dynamic body) async {
     try {
-      final response = await dio.post(apiPath + path, data: body);
+      final response = await dio.post(path, data: body);
       return Result(value: response, error: null);
     } catch (e) {
       return Result(value: null, error: Error());

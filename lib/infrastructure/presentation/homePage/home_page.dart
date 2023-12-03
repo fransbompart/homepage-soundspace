@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:sign_in_bloc/application/BLoC/trendings/trendings_bloc.dart';
 import 'package:sign_in_bloc/infrastructure/presentation/homePage/widgets/promotional_banner_widget.dart';
-import 'package:sign_in_bloc/infrastructure/presentation/widgets/tracklist.dart';
-import '../widgets/albums_carousel.dart';
+import 'package:sign_in_bloc/infrastructure/presentation/shared_widgets/tracklist.dart';
+import '../shared_widgets/albums_carousel.dart';
 import 'widgets/artists_carousel.dart';
 import 'widgets/playlist_wrap.dart';
-import '../widgets/music_player.dart';
+import '../shared_widgets/music_player.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatelessWidget {
@@ -13,8 +14,11 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final getIt = GetIt.instance;
+    final TrendingsBloc trendingsBloc = getIt.get<TrendingsBloc>();
+
     return BlocProvider(
-      create: (context) => TrendingsBloc()..add(FetchTrendingsEvent()),
+      create: (context) => trendingsBloc..add(FetchTrendingsEvent()),
       child: BlocBuilder<TrendingsBloc, TrendingsState>(
         builder: (context, state) {
           if (state is TrendingsLoading) {
@@ -56,7 +60,7 @@ class HomePage extends StatelessWidget {
                       ]),
                       const Divider(
                         color: Color.fromARGB(18, 142, 139, 139),
-                        height: 40,
+                        height: 40, //TODO: poner responsive
                         thickness: 2,
                         indent: 20,
                         endIndent: 20,

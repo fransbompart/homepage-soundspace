@@ -6,9 +6,9 @@ import 'package:sign_in_bloc/commons/result.dart';
 import '../../../domain/playlist/playlist.dart';
 
 class PlaylistRepositoryImpl extends PlaylistRepository {
-  final NetworkManager networkManager = NetworkManager(
-      apiPath:
-          'https://soundspace-api-production.up.railway.app/api/'); //mejorar esto
+  final NetworkManager networkManager;
+
+  PlaylistRepositoryImpl({required this.networkManager}); //mejorar esto
 
   @override
   Future<Result<List<Playlist>>> getPlayList() async {

@@ -5,9 +5,9 @@ import 'package:sign_in_bloc/commons/result.dart';
 import '../../../domain/artist/artist.dart';
 
 class ArtistRepositoryImpl extends ArtistRepository {
-  final NetworkManager networkManager = NetworkManager(
-      apiPath:
-          'https://soundspace-api-production.up.railway.app/api/'); //mejorar esto
+  final NetworkManager networkManager;
+
+  ArtistRepositoryImpl({required this.networkManager}); //mejorar esto
 
   @override
   Future<Result<List<Artist>>> getTrendingArtists() async {
