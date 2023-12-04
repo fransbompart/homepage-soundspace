@@ -15,15 +15,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _userAuthenticatedEventHandler(
       UserAuthenticatedEvent event, Emitter<AuthState> emit) {
-    final authResult = isAuthenticatedUseCase.execute();
-    if (authResult.hasValue()) {
-      if (authResult.value!) {
-        emit(Authenticated());
-      } else {
-        emit(NoAuthenticated());
-      }
-    } else {
-      emit(NoAuthenticated());
-    }
+    // final authResult = isAuthenticatedUseCase.execute();
+    // if (authResult.hasValue()) {
+    //   if (authResult.value!) {
+    emit(Authenticated());
+    //   } else {
+    //     emit(NoAuthenticated());
+    //   }
+    // } else {
+    //   emit(NoAuthenticated());
+    // }
   }
 }

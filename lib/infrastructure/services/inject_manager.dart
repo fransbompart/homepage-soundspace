@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sign_in_bloc/application/BLoC/player/player_bloc.dart';
 import 'package:sign_in_bloc/application/useCases/album/get_trending_albums_use_case.dart';
 import 'package:sign_in_bloc/application/useCases/artist/get_trending_artists_use_case.dart';
 import 'package:sign_in_bloc/application/useCases/playlist/get_trending_playlists_use_case.dart';
@@ -59,6 +60,7 @@ class InjectManager {
         getTrendingSongsUseCase: getTrendingSongsUseCase));
     getIt.registerSingleton<AuthBloc>(
         AuthBloc(isAuthenticatedUseCase: isAuthenticatedUseCase));
+    getIt.registerSingleton<PlayerBloc>(PlayerBloc());
     final authBloc = getIt.get<AuthBloc>();
     //para chekear el estado de la autenticacion
     authBloc.add(UserAuthenticatedEvent());

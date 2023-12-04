@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:sign_in_bloc/application/BLoC/player/player_bloc.dart';
 import 'package:sign_in_bloc/application/BLoC/trendings/trendings_bloc.dart';
 import 'package:sign_in_bloc/infrastructure/presentation/homePage/widgets/promotional_banner_widget.dart';
 import 'package:sign_in_bloc/infrastructure/presentation/shared_widgets/tracklist.dart';
@@ -16,71 +17,89 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final getIt = GetIt.instance;
     final TrendingsBloc trendingsBloc = getIt.get<TrendingsBloc>();
+    final PlayerBloc playerBloc = getIt.get<PlayerBloc>();
 
-    return BlocProvider(
-      create: (context) => trendingsBloc..add(FetchTrendingsEvent()),
-      child: BlocBuilder<TrendingsBloc, TrendingsState>(
-        builder: (context, state) {
-          if (state is TrendingsLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (state is TrendingsLoaded) {
-            return Stack(
-              children: [
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      AppBar(
-                        backgroundColor: Colors.transparent,
-                        actions: const [
-                          Icon(
-                            Icons.search,
-                            color: Colors.white,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => trendingsBloc..add(FetchTrendingsEvent()),
+        ),
+        BlocProvider(
+          create: (context) => playerBloc,
+        ),
+      ],
+      child: BlocBuilder<PlayerBloc, PlayerState>(
+        builder: (context, playerState) {
+          return BlocBuilder<TrendingsBloc, TrendingsState>(
+            builder: (context, trendingsState) {
+              if (trendingsState is TrendingsLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (trendingsState is TrendingsLoaded) {
+                return Stack(
+                  children: [
+                    SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          AppBar(
+                            backgroundColor: Colors.transparent,
+                            actions: const [
+                              Icon(
+                                Icons.search,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 10),
+                              Icon(
+                                Icons.more_vert,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 10),
+                            ],
                           ),
-                          SizedBox(width: 10),
-                          Icon(
-                            Icons.more_vert,
-                            color: Colors.white,
+                          PromotionalBannerWidget(
+                            banner: trendingsState.promotionalBanner,
                           ),
-                          SizedBox(width: 10),
+                          _Collapse(name: 'Playlist', child: [
+                            PlaylistWrap(
+                                playlists: trendingsState.trendingPlaylists)
+                          ]),
+                          _Collapse(name: 'Aqustico Experience', child: [
+                            AlbumsCarousel(
+                                albums: trendingsState.trendingAlbums)
+                          ]),
+                          _Collapse(name: 'Artistas Trending', child: [
+                            ArtistsCarousel(
+                                artists: trendingsState.trendingArtists)
+                          ]),
+                          const Divider(
+                            color: Color.fromARGB(18, 142, 139, 139),
+                            height: 40, //TODO: poner responsive
+                            thickness: 2,
+                            indent: 20,
+                            endIndent: 20,
+                          ),
+                          _Collapse(name: 'Tracklist', child: [
+                            Tracklist(songs: trendingsState.trendingSongs)
+                          ]),
+                          const SizedBox(height: 100)
                         ],
                       ),
-                      PromotionalBannerWidget(
-                        banner: state.promotionalBanner,
+                    ),
+                    Visibility(
+                      visible: playerState is PlayingState,
+                      child: Align(
+                        alignment: Alignment.bottomLeft,
+                        child: MusicPlayer(key: key),
                       ),
-                      _Collapse(name: 'Playlist', child: [
-                        PlaylistWrap(playlists: state.trendingPlaylists)
-                      ]),
-                      _Collapse(name: 'Aqustico Experience', child: [
-                        AlbumsCarousel(albums: state.trendingAlbums)
-                      ]),
-                      _Collapse(name: 'Artistas Trending', child: [
-                        ArtistsCarousel(artists: state.trendingArtists)
-                      ]),
-                      const Divider(
-                        color: Color.fromARGB(18, 142, 139, 139),
-                        height: 40, //TODO: poner responsive
-                        thickness: 2,
-                        indent: 20,
-                        endIndent: 20,
-                      ),
-                      _Collapse(
-                          name: 'Tracklist',
-                          child: [Tracklist(songs: state.trendingSongs)]),
-                      const SizedBox(height: 100)
-                    ],
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: MusicPlayer(key: key),
-                )
-              ],
-            );
-          } else {
-            return const Placeholder(); //Pantalla de error
-          }
+                    )
+                  ],
+                );
+              } else {
+                return const Placeholder(); //Pantalla de error
+              }
+            },
+          );
         },
       ),
     );

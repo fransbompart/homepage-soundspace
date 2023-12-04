@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import '../../../application/BLoC/player/player_bloc.dart';
 import '../../../domain/song/song.dart';
 
 class Tracklist extends StatelessWidget {
@@ -22,8 +24,9 @@ class Tracklist extends StatelessWidget {
 
 class _TracklistItem extends StatelessWidget {
   final Song song;
+  final playerBloc = GetIt.instance.get<PlayerBloc>();
 
-  const _TracklistItem({required this.song});
+  _TracklistItem({required this.song});
 
   @override
   Widget build(BuildContext context) {
@@ -67,11 +70,13 @@ class _TracklistItem extends StatelessWidget {
                   Text(song.duration), //duracion total de la cancion
                   const SizedBox(width: 6),
                   IconButton(
-                      onPressed: () async {},
-                      icon: const Icon(
-                        Icons.play_arrow_sharp,
-                        color: Color(0xff1de1ee),
-                      ))
+                    onPressed: () =>
+                        playerBloc.add(PlayingStartedEvent(song: song)),
+                    icon: const Icon(
+                      Icons.play_arrow_sharp,
+                      color: Color(0xff1de1ee),
+                    ),
+                  ),
                 ],
               ),
             )
