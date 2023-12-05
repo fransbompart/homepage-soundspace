@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sign_in_bloc/application/BLoC/notifications/notifications_bloc.dart';
 import 'package:sign_in_bloc/application/BLoC/trendings/trendings_bloc.dart';
 import 'package:sign_in_bloc/domain/playlist/playlist.dart';
 import '../widgets/music_album_card.dart';
@@ -31,16 +32,27 @@ class HomePage extends StatelessWidget {
                   child: Column(
                     children: [
                       AppBar(
+                        title: context.select((NotificationsBloc bloc) => Text(
+                              '${bloc.state.status}',
+                              style: TextStyle(color: Colors.white),
+                            )),
                         backgroundColor: Colors.transparent,
-                        actions: const [
+                        actions: [
                           Icon(
                             Icons.search,
                             color: Colors.white,
                           ),
                           SizedBox(width: 10),
-                          Icon(
-                            Icons.more_vert,
-                            color: Colors.white,
+                          IconButton(
+                            onPressed: () {
+                              context
+                                  .read<NotificationsBloc>()
+                                  .requestPermission();
+                            },
+                            icon: const Icon(
+                              Icons.more_vert,
+                              color: Colors.white,
+                            ),
                           ),
                           SizedBox(width: 10),
                         ],

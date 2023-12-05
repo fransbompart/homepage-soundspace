@@ -1,12 +1,27 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sign_in_bloc/application/BLoC/notifications/notifications_bloc.dart';
+import 'package:sign_in_bloc/config/local_notifications/local_notifications.dart';
 import 'package:sign_in_bloc/infrastructure/presentation/config/app_theme.dart';
 import 'package:sign_in_bloc/infrastructure/presentation/config/background.dart';
 
 import 'application/BLoC/trendings/trendings_bloc.dart';
 import 'infrastructure/presentation/homePage/home_page.dart';
 
-void main() {
+void main() async {
+  // PARA INICIALIZAR LOS WIDGETS
+  WidgetsFlutterBinding.ensureInitialized();
+
+  //PARA RECIBIR NOTIFICACIONES EN BACKGROUND
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+  //PARA INICIALIZAR FIREBASE CLOUD MESSAGING
+  await NotificationsBloc.initializeFCM();
+
+  //PARA INICIALiZAR LOCAL NOTIFICATIONS
+  await LocalNotifications.inicializeLocalNotifications();
+
   runApp(const MyApp());
 }
 
@@ -21,7 +36,15 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme().getTheme(),
       home: MultiBlocProvider(
-        providers: [BlocProvider(create: (context) => TrendingsBloc())],
+        providers: [
+          BlocProvider(create: (context) => TrendingsBloc()),
+          BlocProvider(
+              create: (context) => NotificationsBloc(
+                  showLocalNotifications:
+                      LocalNotifications.showLocalNotifications,
+                  requestLocalNotificationPermissions:
+                      LocalNotifications.requestPermissionLocalNotifications))
+        ],
         child: const GradientBackground(child: HomePage()),
       ),
     );

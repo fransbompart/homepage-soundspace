@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "716971931336",
+    "project_id": "notificacionespush-62db3",
+    "storage_bucket": "notificacionespush-62db3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:716971931336:android:000f8c2176a276a9a557fd",
+        "android_client_info": {
+          "package_name": "com.hackersucab2023.todayversion"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVRcEA3wDADnBq2g7HXxPifP40Si6XTZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
