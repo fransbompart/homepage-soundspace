@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sign_in_bloc/infrastructure/presentation/config/app_theme.dart';
 import 'package:sign_in_bloc/infrastructure/presentation/config/background.dart';
+import 'package:sign_in_bloc/infrastructure/presentation/loginPage/login_page.dart';
 
 import 'application/BLoC/trendings/trendings_bloc.dart';
 import 'infrastructure/presentation/homePage/home_page.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: AppTheme().getTheme(),
       home: MultiBlocProvider(
         providers: [BlocProvider(create: (context) => TrendingsBloc())],
-        child: const GradientBackground(child: HomePage()),
+        child: const GradientBackground(child: RegisterScreen()),
       ),
     );
   }

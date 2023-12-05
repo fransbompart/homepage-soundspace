@@ -5,7 +5,7 @@ import 'package:sign_in_bloc/infrastructure/repositories/artist/artist_repositor
 
 import '../../useCases/artist/get_trending_artist_use_case.dart';
 part 'trendings_event.dart';
-part 'trendings_state.dart';
+part 'trendings_state.dart'; 
 
 class TrendingsBloc extends Bloc<TrendingsEvent, TrendingsState> {
   final GetTrendingArtistUseCase getTrendingArtistUseCase =
