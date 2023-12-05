@@ -6,6 +6,8 @@ import 'package:sign_in_bloc/infrastructure/inputs/phone.dart';
 
 part 'log_in_subscriber_state.dart';
 
+//TODO: importar logInUSeCase
+
 class LogInSubscriberCubit extends Cubit<LogInSubscriberState> {
   LogInSubscriberCubit() : super(LogInSubscriberInitial());
   void onSubmit() {
@@ -17,10 +19,9 @@ class LogInSubscriberCubit extends Cubit<LogInSubscriberState> {
         isValid: Formz.validate([
           state.phone 
         ])
+        
       )
     );
-
-
 
     print('Cubit Submit: $state');
   }

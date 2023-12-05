@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:sign_in_bloc/application/BLoC/LogInSubscriber/log_in_subscriber_cubit.dart';
 import 'package:sign_in_bloc/infrastructure/inputs/phone.dart';
 import 'Widgets/error_square.dart';
@@ -34,17 +33,13 @@ class RegisterScreen extends StatelessWidget {
         ),
           child: const _RegisterView()),
       )
-      
-       
     );
   }
 
 }
 
-
 class _RegisterView extends StatelessWidget {
   const _RegisterView();
-
   @override
   Widget build(BuildContext context) {
     return const SafeArea(
@@ -63,7 +58,6 @@ class _RegisterView extends StatelessWidget {
                       color: Colors.white,
                       fontSize: 37,
                       fontWeight: FontWeight.w500,
-                      
                     ),
                   ),
                 ),
@@ -71,7 +65,6 @@ class _RegisterView extends StatelessWidget {
                  SizedBox(height: 30),
 
                 //Numero de teléfono text
-
                  Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15.0),
                   child: Text(
@@ -97,8 +90,6 @@ class _RegisterView extends StatelessWidget {
   }
 }
 
-
-
 class _RegisterForm extends StatelessWidget {
   const _RegisterForm();
 
@@ -113,12 +104,11 @@ class _RegisterForm extends StatelessWidget {
     return Form(
       child: Column(
         children: [
-
           CustomTextFormField(
             label: 'Nombre de usuario',
             onChanged: registerCubit.phoneChanged,
             errorMessage: phoneError == PhoneError.empty
-        ? phone.errorMessage : null,
+            ? phone.errorMessage : null,
             hint: 'Ej. 584241232323 o 4121232323',
             icon: Icons.info_outlined,
           ),
@@ -181,7 +171,6 @@ class _RegisterForm extends StatelessWidget {
                       }
                   ),
                 ),
-
         ],
       )
     );
