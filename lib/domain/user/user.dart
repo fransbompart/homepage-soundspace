@@ -9,7 +9,7 @@ class User {
   final IdUser id;
   final UserName? name;
   final EmailAddress? email;
-  final PhoneNumber phone;
+  final PhoneNumber? phone;
   final UserRole? role;
   final BirthDate? birthdate;
 
@@ -17,7 +17,7 @@ class User {
     required this.id,
     this.name,
     this.email,
-    required this.phone,
+    this.phone,
     this.role,
     this.birthdate,
   });

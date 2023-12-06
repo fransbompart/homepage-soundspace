@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sign_in_bloc/application/BLoC/LogInSubscriber/log_in_subscriber_cubit.dart';
 import 'package:sign_in_bloc/infrastructure/inputs/phone.dart';
+import 'package:sign_in_bloc/infrastructure/presentation/homePage/home_page.dart';
 import 'Widgets/error_square.dart';
 import 'Widgets/my_button.dart';
 import 'Widgets/operators_button.dart';
@@ -13,7 +14,6 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: BlocProvider(
         create: (context) => LogInSubscriberCubit(),
         child: Container(
@@ -35,7 +35,6 @@ class RegisterScreen extends StatelessWidget {
       )
     );
   }
-
 }
 
 class _RegisterView extends StatelessWidget {
@@ -72,7 +71,6 @@ class _RegisterView extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
-                      
                     ),
                   ),
                 ),
@@ -92,6 +90,13 @@ class _RegisterView extends StatelessWidget {
 
 class _RegisterForm extends StatelessWidget {
   const _RegisterForm();
+  void navigateToHomePage(BuildContext context) async {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const HomePage()),
+      );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,30 +104,45 @@ class _RegisterForm extends StatelessWidget {
     final registerCubit = context.watch<LogInSubscriberCubit>();
     final phone = registerCubit.state.phone;
     final phoneError = phone.error;
-    final isSubmitting = registerCubit.state.formStatus == FormStatus.validating;
+    final isSubmitting = registerCubit.state.formStatus == FormStatus.posting;
+    final isSuccess = registerCubit.state.formStatus == FormStatus.success;
+    final isFailure = registerCubit.state.formStatus == FormStatus.failure;
 
-    return Form(
+    return BlocListener<LogInSubscriberCubit, LogInSubscriberState>(
+    listener: (context, state) {
+    if (state.formStatus == FormStatus.success) {
+      navigateToHomePage(context);
+    }
+  },
+    child: Form(
       child: Column(
         children: [
           CustomTextFormField(
             label: 'Nombre de usuario',
             onChanged: registerCubit.phoneChanged,
-            errorMessage: phoneError == PhoneError.empty
+            errorMessage: phoneError != null 
             ? phone.errorMessage : null,
             hint: 'Ej. 584241232323 o 4121232323',
             icon: Icons.info_outlined,
           ),
 
-          isSubmitting && phoneError == PhoneError.length? const ErrorSquare(
-            invalidData: true,
-            mensaje: 'Datos inválidos, intenta nuevamente.',
-          ):const SizedBox(height: 15) ,
-
           const SizedBox(height: 15),
 
-          MyButton(onTap: () {
-                  registerCubit.onSubmit();
-                }),
+          if (isFailure) const ErrorSquare(
+            invalidData: true,
+            mensaje: 'Datos inválidos, intenta nuevamente.',
+          ),
+          if (isSubmitting)
+            const CircularProgressIndicator(),
+
+            const SizedBox(height: 15),
+
+          if (!isSubmitting) 
+            MyButton(onTap: () {
+              registerCubit.onSubmit();
+              if (isSuccess){
+                navigateToHomePage(context);}
+            }),
            // Suscríbete text
                 const SizedBox(height: 65),
                 const Row(
@@ -173,6 +193,7 @@ class _RegisterForm extends StatelessWidget {
                 ),
         ],
       )
+    )
     );
   }
 }

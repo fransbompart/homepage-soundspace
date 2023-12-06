@@ -1,6 +1,6 @@
 part of 'log_in_subscriber_cubit.dart';
 
-enum FormStatus { invalid, valid, validating, posting }
+enum FormStatus { invalid, valid, validating, posting, success, failure }
 
 class LogInSubscriberState extends Equatable {
   final FormStatus formStatus;

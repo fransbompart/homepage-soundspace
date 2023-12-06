@@ -16,4 +16,13 @@ class NetworkManager {
       return Result(value: null, error: Error());
     }
   }
+
+  Future<Result<dynamic>> postRequest(String path, dynamic data) async {
+    try {
+      final response = await dio.post(apiPath + path, data: data);
+      return Result(value: response.data, error: null);
+    } catch (e) {
+      return Result(value: null, error: Error());
+    }
+  }
 }
