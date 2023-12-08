@@ -1,10 +1,11 @@
 import 'package:flutter/widgets.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sign_in_bloc/application/BLoC/auth/auth_bloc.dart';
-import 'package:sign_in_bloc/infrastructure/presentation/homePage/home_page.dart';
-import 'package:sign_in_bloc/infrastructure/presentation/landing/landing_page.dart';
+import 'package:sign_in_bloc/infrastructure/presentation/pages/homePage/home_page.dart';
+import 'package:sign_in_bloc/infrastructure/presentation/pages/logIn/log_in_page.dart';
 import 'package:sign_in_bloc/infrastructure/presentation/shared_widgets/no_internet_connection.dart';
-import '../../artistDetail/artist_detail.dart';
+import '../../pages/artistDetail/artist_detail.dart';
 
 part 'route_guard.dart';
 
@@ -12,7 +13,7 @@ class AppNavigator {
   late final GoRouter _routes;
   final AuthRouteGuard authRouteGuard;
   final SubscriptionRouteGuard subscriptionRouteGuard;
-
+  final getIt = GetIt.instance;
   AppNavigator(
       {required this.authRouteGuard, required this.subscriptionRouteGuard}) {
     _routes = GoRouter(
@@ -20,7 +21,7 @@ class AppNavigator {
       routes: [
         GoRoute(
           path: '/',
-          builder: (context, state) => const LandingPage(),
+          builder: (context, state) => const RegisterScreen(),
           redirect: _authProtectedNavigation,
         ),
         GoRoute(

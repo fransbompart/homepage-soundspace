@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sign_in_bloc/application/BLoC/player/player_bloc.dart';
 import 'package:sign_in_bloc/application/BLoC/trendings/trendings_bloc.dart';
-import 'package:sign_in_bloc/infrastructure/presentation/homePage/widgets/promotional_banner_widget.dart';
+import 'package:sign_in_bloc/infrastructure/presentation/pages/homePage/widgets/promotional_banner_widget.dart';
 import 'package:sign_in_bloc/infrastructure/presentation/shared_widgets/ipage.dart';
 import 'package:sign_in_bloc/infrastructure/presentation/shared_widgets/tracklist.dart';
-import '../shared_widgets/albums_carousel.dart';
+import '../../shared_widgets/albums_carousel.dart';
 import 'widgets/artists_carousel.dart';
 import 'widgets/playlist_wrap.dart';
-import '../shared_widgets/music_player.dart';
+import '../../shared_widgets/music_player.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends IPage {

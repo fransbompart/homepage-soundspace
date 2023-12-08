@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../domain/promotional_banner/promotional_banner.dart';
+import '../../../../../domain/promotional_banner/promotional_banner.dart';
 
 class PromotionalBannerWidget extends StatefulWidget {
   final PromotionalBanner banner;

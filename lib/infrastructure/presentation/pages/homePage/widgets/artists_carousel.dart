@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import '../../../../domain/artist/artist.dart';
-import '../../config/router/app_router.dart';
+import '../../../../../domain/artist/artist.dart';
+import '../../../config/router/app_router.dart';
 
 class ArtistsCarousel extends StatelessWidget {
   final List<Artist> artists;

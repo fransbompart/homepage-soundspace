@@ -6,6 +6,7 @@ import 'package:sign_in_bloc/application/BLoC/trendings/trendings_bloc.dart';
 import 'package:sign_in_bloc/infrastructure/presentation/config/theme/app_theme.dart';
 import 'package:sign_in_bloc/infrastructure/services/inject_manager.dart';
 import 'application/BLoC/auth/auth_bloc.dart';
+import 'application/BLoC/logInSubscriber/log_in_subscriber_cubit.dart';
 import 'application/BLoC/player/player_bloc.dart';
 import 'infrastructure/presentation/config/router/app_router.dart';
 
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final getIt = GetIt.instance;
     final appNavigator = getIt.get<AppNavigator>();
-
+    //TODO: poner esto en un widget privado
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -37,7 +38,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => getIt.get<ConnectivityBloc>(),
-        )
+        ),
+        BlocProvider(
+          create: (context) {
+            return getIt.get<LogInSubscriberCubit>();
+          },
+        ),
       ],
       child: MaterialApp.router(
         title: 'SoundSpace', //TODO: mejorar con las .env

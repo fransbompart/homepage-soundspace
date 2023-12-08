@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../domain/playlist/playlist.dart';
+import '../../../../../domain/playlist/playlist.dart';
 
 class PlaylistWrap extends StatelessWidget {
   final List<Playlist> playlists;
