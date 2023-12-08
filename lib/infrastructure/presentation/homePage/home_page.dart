@@ -22,11 +22,7 @@ class HomePage extends IPage {
       builder: (context, playerState) {
         return BlocBuilder<TrendingsBloc, TrendingsState>(
           builder: (context, trendingsState) {
-            if (trendingsState is TrendingsLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (trendingsState is TrendingsLoaded) {
+            if (trendingsState is TrendingsLoaded) {
               return Stack(
                 children: [
                   SingleChildScrollView(
@@ -85,7 +81,9 @@ class HomePage extends IPage {
                 ],
               );
             } else {
-              return const Placeholder(); //Pantalla de error
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             }
           },
         );

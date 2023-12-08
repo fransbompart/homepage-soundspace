@@ -56,7 +56,8 @@ class TrendingsBloc extends Bloc<TrendingsEvent, TrendingsState> {
         trendingSongs: trendingSongsResult.value!,
       ));
     } else {
-      emit(TrendingsFailed());
+      emit(
+          TrendingsFailed()); //TODO: verificar si la unica razon por la que esto falle es por falta de internet
     }
   }
 }

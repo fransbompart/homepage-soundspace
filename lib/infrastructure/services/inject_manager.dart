@@ -15,6 +15,7 @@ import 'package:sign_in_bloc/infrastructure/services/connectivity_checker.dart';
 import 'package:sign_in_bloc/infrastructure/services/local_storage_impl.dart';
 import 'package:sign_in_bloc/infrastructure/services/network_manager.dart';
 import '../../application/BLoC/auth/auth_bloc.dart';
+import '../../application/BLoC/connectivity/connectivity_bloc.dart';
 import '../../application/BLoC/trendings/trendings_bloc.dart';
 import '../../application/useCases/promotional_banner/get_promotional_banner_use_case.dart';
 import '../presentation/config/router/app_router.dart';
@@ -63,6 +64,10 @@ class InjectManager {
         AuthBloc(isAuthenticatedUseCase: isAuthenticatedUseCase));
     getIt.registerSingleton<PlayerBloc>(PlayerBloc());
     final authBloc = getIt.get<AuthBloc>();
+
+    getIt.registerSingleton<ConnectivityBloc>(
+        ConnectivityBloc(connectivityChecker: ConnectivityChecker())
+          ..add(ConnectivityInitialCheckRequested()));
     //para chekear el estado de la autenticacion
     authBloc.add(UserAuthenticatedEvent());
     final authGuard = AuthRouteGuard(authBloc: authBloc);

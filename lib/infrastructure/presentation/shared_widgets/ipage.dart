@@ -13,30 +13,26 @@ abstract class IPage extends StatelessWidget {
       body: Stack(children: [
         _GradientBackground(),
         BlocListener<ConnectivityBloc, ConnectivityState>(
-            listener: (context, state) => state is NotConnectedState
-                ? ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('No internet connection'),
-                      backgroundColor: Colors.red,
-                    ),
-                  )
-                : state.willNeedReconnection
-                    ? ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Reconnected'),
-                          backgroundColor: Colors.green,
-                        ),
-                      )
-                    : null,
-            child: BlocBuilder<ConnectivityBloc, ConnectivityState>(
-              builder: (context, state) => state is NotConnectedState
-                  ? const Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ),
-                    )
-                  : child(context),
-            )),
+          listener: (context, state) {
+            if (state is NotConnectedState || state.willNeedReconnection) {
+              //TODO: poner esto como showDialog bonito en un widget privado or something
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: state is NotConnectedState
+                      ? const Text('No internet connection')
+                      : const Text('Reconnecting...'),
+                  backgroundColor:
+                      state is NotConnectedState ? Colors.red : Colors.green,
+                ),
+              );
+            }
+          },
+          child: BlocBuilder<ConnectivityBloc, ConnectivityState>(
+            builder: (context, state) {
+              return child(context);
+            },
+          ),
+        ),
       ]),
     );
   }

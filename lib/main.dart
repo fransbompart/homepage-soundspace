@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:sign_in_bloc/application/BLoC/connectivity/connectivity_bloc.dart';
 import 'package:sign_in_bloc/application/BLoC/trendings/trendings_bloc.dart';
 import 'package:sign_in_bloc/infrastructure/presentation/config/theme/app_theme.dart';
 import 'package:sign_in_bloc/infrastructure/services/inject_manager.dart';
@@ -33,6 +34,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => getIt.get<TrendingsBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt.get<ConnectivityBloc>(),
         )
       ],
       child: MaterialApp.router(
