@@ -12,6 +12,8 @@ class NetworkManager {
     try {
       final response = await dio.get(path);
       return Result(value: response, error: null);
+    } on DioException {
+      return Result(value: null, error: Error());
     } catch (e) {
       return Result(value: null, error: Error());
     }

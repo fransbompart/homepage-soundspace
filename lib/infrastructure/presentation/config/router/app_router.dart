@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sign_in_bloc/application/BLoC/auth/auth_bloc.dart';
 import 'package:sign_in_bloc/infrastructure/presentation/homePage/home_page.dart';
 import 'package:sign_in_bloc/infrastructure/presentation/landing/landing_page.dart';
-import 'package:sign_in_bloc/infrastructure/presentation/shared_widgets/background.dart';
+import 'package:sign_in_bloc/infrastructure/presentation/shared_widgets/no_internet_connection.dart';
 import '../../artistDetail/artist_detail.dart';
 
 part 'route_guard.dart';
@@ -20,18 +20,22 @@ class AppNavigator {
       routes: [
         GoRoute(
           path: '/',
-          builder: (context, state) => const Background(child: LandingPage()),
+          builder: (context, state) => const LandingPage(),
           redirect: _authProtectedNavigation,
         ),
         GoRoute(
           path: '/home',
-          builder: (context, state) => const Background(child: HomePage()),
+          builder: (context, state) => const HomePage(),
         ),
         GoRoute(
           path: '/artist',
-          builder: (context, state) => const Background(child: ArtistDetail()),
+          builder: (context, state) => const ArtistDetail(),
           redirect: _subscriptionProtectedNavigation,
         ),
+        GoRoute(
+          path: '/connection-lost',
+          builder: (context, state) => const NoInternetConnection(),
+        )
       ],
     );
   }
@@ -49,11 +53,15 @@ class AppNavigator {
   }
 
   void pop() {
-    _routes.pop();
+    _routes.canPop() ? _routes.pop() : _routes.go('/');
   }
 
   void navigateTo(String routeName) {
-    _routes.go(routeName);
+    _routes.push(routeName);
+  }
+
+  void replaceWith(String routeName) {
+    _routes.replace(routeName);
   }
 
   String? _authProtectedNavigation(BuildContext context, GoRouterState state) {

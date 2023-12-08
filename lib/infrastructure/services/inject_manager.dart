@@ -11,6 +11,7 @@ import 'package:sign_in_bloc/infrastructure/repositories/album/album_repository_
 import 'package:sign_in_bloc/infrastructure/repositories/artist/artist_repository_impl.dart';
 import 'package:sign_in_bloc/infrastructure/repositories/promotional_banner/promotional_banner_repository_impl.dart';
 import 'package:sign_in_bloc/infrastructure/repositories/song/song_repository_impl.dart';
+import 'package:sign_in_bloc/infrastructure/services/connectivity_checker.dart';
 import 'package:sign_in_bloc/infrastructure/services/local_storage_impl.dart';
 import 'package:sign_in_bloc/infrastructure/services/network_manager.dart';
 import '../../application/BLoC/auth/auth_bloc.dart';
@@ -68,5 +69,9 @@ class InjectManager {
     final subscriptionGuard = SubscriptionRouteGuard(authBloc: authBloc);
     getIt.registerSingleton<AppNavigator>(AppNavigator(
         authRouteGuard: authGuard, subscriptionRouteGuard: subscriptionGuard));
+
+    final ConnectivityChecker connectivityChecker = ConnectivityChecker();
+    await connectivityChecker.checkInitialConnection();
+    connectivityChecker.checkConnectionStream();
   }
 }
