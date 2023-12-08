@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sign_in_bloc/infrastructure/presentation/config/router/app_router.dart';
-import 'package:sign_in_bloc/infrastructure/presentation/shared_widgets/background.dart';
+import 'package:sign_in_bloc/infrastructure/presentation/shared_widgets/ipage.dart';
 import '../../../application/BLoC/player/player_bloc.dart';
 import '../shared_widgets/music_player.dart';
 
-class ArtistDetail extends Background {
+class ArtistDetail extends IPage {
   const ArtistDetail({Key? key}) : super(key: key);
 
   @override

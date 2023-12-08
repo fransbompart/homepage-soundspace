@@ -1,39 +1,26 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:get_it/get_it.dart';
-import 'package:sign_in_bloc/infrastructure/presentation/config/router/app_router.dart';
 
 class ConnectivityChecker {
   Connectivity connectivity = Connectivity();
-  bool connectionLost = false;
 
-  void checkConnectionStream() {
-    connectivity.onConnectivityChanged.listen((result) {
-      final appNavigator = GetIt.instance.get<AppNavigator>();
-      if (result == ConnectivityResult.wifi ||
-          result == ConnectivityResult.mobile) {
-        if (connectionLost) {
-          appNavigator.replaceWith('/home');
-          connectionLost = false;
-        }
+  Stream<bool> checkConnectionStream() {
+    return connectivity.onConnectivityChanged.map((event) {
+      if (event == ConnectivityResult.wifi ||
+          event == ConnectivityResult.mobile) {
+        return true;
       } else {
-        connectionLost = true;
-        appNavigator.replaceWith('/connection-lost');
+        return false;
       }
     });
   }
 
-  Future<void> checkInitialConnection() async {
+  Future<bool> checkInitialConnection() async {
     final result = await connectivity.checkConnectivity();
-    final appNavigator = GetIt.instance.get<AppNavigator>();
     if (result == ConnectivityResult.wifi ||
         result == ConnectivityResult.mobile) {
-      if (connectionLost) {
-        appNavigator.pop();
-        connectionLost = false;
-      }
+      return true;
     } else {
-      connectionLost = true;
-      appNavigator.navigateTo('/connection-lost');
+      return false;
     }
   }
 }

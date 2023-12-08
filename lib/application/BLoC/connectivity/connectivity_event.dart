@@ -1,8 +1,7 @@
 part of 'connectivity_bloc.dart';
 
-sealed class ConnectivityEvent extends Equatable {
-  const ConnectivityEvent();
+abstract class ConnectivityEvent {}
 
-  @override
-  List<Object> get props => [];
-}
+class ConnectivityInitialCheckRequested extends ConnectivityEvent {}
+
+class ConnectivityCheckRequested extends ConnectivityEvent {}

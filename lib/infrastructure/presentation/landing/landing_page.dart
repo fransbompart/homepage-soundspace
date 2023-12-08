@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sign_in_bloc/infrastructure/presentation/shared_widgets/background.dart';
+import 'package:sign_in_bloc/infrastructure/presentation/shared_widgets/ipage.dart';
 
-class LandingPage extends Background {
+class LandingPage extends IPage {
   const LandingPage({super.key});
 
   @override
