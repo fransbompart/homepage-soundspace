@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:sign_in_bloc/application/BLoC/connectivity/connectivity_bloc.dart';
 
 abstract class IPage extends StatelessWidget {
@@ -29,6 +30,11 @@ abstract class IPage extends StatelessWidget {
           },
           child: BlocBuilder<ConnectivityBloc, ConnectivityState>(
             builder: (context, state) {
+              if (state is ConnectivityInitialState) {
+                GetIt.instance
+                    .get<ConnectivityBloc>()
+                    .add(ConnectivityInitialCheckRequested());
+              }
               return child(context);
             },
           ),

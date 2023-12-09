@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sign_in_bloc/application/BLoC/LogInSubscriber/log_in_subscriber_cubit.dart';
-import 'package:sign_in_bloc/application/useCases/user/log_in_use_case.dart';
-import 'package:sign_in_bloc/domain/user/repository/user_repository.dart';
+import 'package:sign_in_bloc/application/BLoC/logInSubs/log_in_subscriber_bloc.dart';
 import 'package:sign_in_bloc/infrastructure/presentation/config/router/app_router.dart';
-import 'package:sign_in_bloc/infrastructure/services/network_manager.dart';
+import '../../../../application/BLoC/auth/auth_bloc.dart';
 import '../../shared_widgets/ipage.dart';
 import 'Widgets/custom_text_form_field.dart';
 import 'Widgets/error_square.dart';
@@ -17,15 +15,15 @@ class RegisterScreen extends IPage {
 
   @override
   Widget child(BuildContext context) {
-    return SafeArea(
+    return const SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: EdgeInsets.symmetric(horizontal: 10),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 140),
-              const Padding(
+              SizedBox(height: 140),
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15.0),
                 child: Text(
                   'Iniciar sesión',
@@ -37,10 +35,10 @@ class RegisterScreen extends IPage {
                 ),
               ),
 
-              const SizedBox(height: 30),
+              SizedBox(height: 30),
 
               //Numero de teléfono text
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15.0),
                 child: Text(
                   'Número de teléfono',
@@ -51,20 +49,11 @@ class RegisterScreen extends IPage {
                 ),
               ),
 
-              const SizedBox(height: 15),
+              SizedBox(height: 15),
 
-              MultiBlocProvider(
-                providers: [
-                  BlocProvider(
-                      create: (context) => LogInSubscriberCubit(
-                          logInUseCase: LogInUseCase(
-                              userRepository: UserRepositoryImpl(
-                                  networkManager: NetworkManager())))),
-                ],
-                child: const _RegisterForm(),
-              ),
+              _RegisterForm(),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
             ],
           ),
         ),
@@ -78,42 +67,49 @@ class _RegisterForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final registerCubit = context.watch<LogInSubscriberCubit>();
-    final appNavigator = GetIt.instance.get<AppNavigator>();
-    final phone = registerCubit.state.phone;
-    final phoneError = phone.error;
-    final isSubmitting = registerCubit.state.formStatus == FormStatus.posting;
-    final isFailure = registerCubit.state.formStatus == FormStatus.failure;
+    final getIt = GetIt.instance;
+    final registerBloc = getIt.get<LogInSubscriberBloc>();
+    final appNavigator = getIt.get<AppNavigator>();
 
-    return BlocListener<LogInSubscriberCubit, LogInSubscriberState>(
-        listener: (context, state) => state.formStatus == FormStatus.success
-            ? appNavigator.navigateTo('/home')
-            : null,
-        child: Form(
+    return BlocListener<LogInSubscriberBloc, LogInSubscriberState>(
+        listener: (context, state) {
+      if (state.formStatus == FormStatus.success) {
+        getIt.get<AuthBloc>().add(UserAuthenticatedEvent());
+        appNavigator.navigateTo('/home');
+      }
+    }, child: BlocBuilder<LogInSubscriberBloc, LogInSubscriberState>(
+      builder: (context, state) {
+        return Form(
             child: Column(
           children: [
             CustomTextFormField(
               label: 'Nombre de usuario',
-              onChanged: registerCubit.phoneChanged,
-              errorMessage: phoneError != null ? phone.errorMessage : null,
+              onChanged: registerBloc.onPhoneChanged,
+              errorMessage:
+                  state.phone.error != null ? state.phone.errorMessage : null,
               hint: 'Ej. 584241232323 o 4121232323',
               icon: Icons.info_outlined,
             ),
 
             const SizedBox(height: 15),
 
-            if (isFailure)
+            if (state.formStatus == FormStatus.invalid)
               const ErrorSquare(
                 invalidData: true,
                 mensaje:
                     'Datos inválidos, intenta nuevamente.', //TODO: este mensaje puede ser de la api, hacerlo dinamico
               ),
 
-            if (isSubmitting) const CircularProgressIndicator(),
+            if (state.formStatus == FormStatus.failure)
+              const CircularProgressIndicator(),
 
             const SizedBox(height: 15),
 
-            if (!isSubmitting) MyButton(onTap: () => registerCubit.onSubmit()),
+            if (state.formStatus != FormStatus.posting)
+              MyButton(
+                  onTap: () => registerBloc.add(LogInSubscriberSubmitted(
+                      phone:
+                          state.phone.value))), //TODO: hacer el boton dinamico
             // Suscríbete text
             const SizedBox(height: 65),
             const Row(
@@ -163,6 +159,8 @@ class _RegisterForm extends StatelessWidget {
                   }),
             ),
           ],
-        )));
+        ));
+      },
+    ));
   }
 }

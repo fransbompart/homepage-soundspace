@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sign_in_bloc/application/BLoC/logInSubscriber/log_in_subscriber_cubit.dart';
 import 'package:sign_in_bloc/application/BLoC/player/player_bloc.dart';
 import 'package:sign_in_bloc/application/useCases/album/get_trending_albums_use_case.dart';
 import 'package:sign_in_bloc/application/useCases/artist/get_trending_artists_use_case.dart';
@@ -18,6 +17,7 @@ import 'package:sign_in_bloc/infrastructure/services/local_storage_impl.dart';
 import 'package:sign_in_bloc/infrastructure/services/network_manager.dart';
 import '../../application/BLoC/auth/auth_bloc.dart';
 import '../../application/BLoC/connectivity/connectivity_bloc.dart';
+import '../../application/BLoC/logInSubs/log_in_subscriber_bloc.dart';
 import '../../application/BLoC/trendings/trendings_bloc.dart';
 import '../../application/useCases/promotional_banner/get_promotional_banner_use_case.dart';
 import '../../application/useCases/user/log_in_use_case.dart';
@@ -43,8 +43,8 @@ class InjectManager {
     final sharedPreferences = await SharedPreferences.getInstance();
     final localStorage = LocalStorageImpl(prefs: sharedPreferences);
     //usecases
-    final LogInUseCase logInUseCase =
-        LogInUseCase(userRepository: userRepository);
+    final LogInUseCase logInUseCase = LogInUseCase(
+        userRepository: userRepository, localStorage: localStorage);
     final GetPromotionalBannerUseCase getPromotionalBannerUseCase =
         GetPromotionalBannerUseCase(
             promotionalBannerRepository: promotionalBannerRepository);
@@ -70,13 +70,12 @@ class InjectManager {
     getIt.registerSingleton<AuthBloc>(
         AuthBloc(isAuthenticatedUseCase: isAuthenticatedUseCase));
     getIt.registerSingleton<PlayerBloc>(PlayerBloc());
-    getIt.registerSingleton<LogInSubscriberCubit>(
-        LogInSubscriberCubit(logInUseCase: logInUseCase));
+    getIt.registerSingleton<LogInSubscriberBloc>(
+        LogInSubscriberBloc(logInUseCase: logInUseCase));
     final authBloc = getIt.get<AuthBloc>();
 
     getIt.registerSingleton<ConnectivityBloc>(
-        ConnectivityBloc(connectivityChecker: ConnectivityChecker())
-          ..add(ConnectivityInitialCheckRequested()));
+        ConnectivityBloc(connectivityChecker: ConnectivityChecker()));
     //para chekear el estado de la autenticacion
     authBloc.add(UserAuthenticatedEvent());
     final authGuard = AuthRouteGuard(authBloc: authBloc);

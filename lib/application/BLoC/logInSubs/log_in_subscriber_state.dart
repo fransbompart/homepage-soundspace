@@ -8,7 +8,7 @@ class LogInSubscriberState extends Equatable {
   final Phone phone;
 
   const LogInSubscriberState({
-    this.formStatus = FormStatus.invalid,
+    this.formStatus = FormStatus.validating,
     this.isValid = false,
     this.phone = const Phone.pure(),
   });

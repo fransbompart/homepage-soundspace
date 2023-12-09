@@ -13,7 +13,8 @@ class LogInSubscriberBloc
   final LogInUseCase logInUseCase;
   LogInSubscriberBloc({required this.logInUseCase})
       : super(const LogInSubscriberState()) {
-    on<LogInSubscriberEvent>(_onSubmited);
+    on<LogInSubscriberSubmitted>(_onSubmited);
+    on<LogInSubscriberPhoneChanged>(_phoneChanged);
   }
 
   Future<void> _onSubmited(
@@ -39,12 +40,16 @@ class LogInSubscriberBloc
     }
   }
 
-  Future<void> phoneChanged(
+  Future<void> _phoneChanged(
       LogInSubscriberEvent event, Emitter<LogInSubscriberState> emit) async {
     final phone = Phone.dirty(event.phone);
     emit(state.copyWith(
         formStatus: FormStatus.valid,
         phone: phone,
         isValid: Formz.validate([phone])));
+  }
+
+  void onPhoneChanged(String value) {
+    add(LogInSubscriberPhoneChanged(phone: value));
   }
 }
