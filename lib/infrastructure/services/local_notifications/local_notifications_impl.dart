@@ -1,8 +1,9 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:sign_in_bloc/infrastructure/services/local_notifications/local_notifications.dart';
 
-class LocalNotifications {
-  //TODO: esto es una interfaz
-  static Future<void> requestPermissionLocalNotifications() async {
+class LocalNotificationsImpl extends LocalNotifications {
+  @override
+  Future<void> inicializeLocalNotifications() async {
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
         FlutterLocalNotificationsPlugin();
     await flutterLocalNotificationsPlugin
@@ -11,7 +12,8 @@ class LocalNotifications {
         ?.requestNotificationsPermission();
   }
 
-  static Future<void> inicializeLocalNotifications() async {
+  @override
+  Future<void> requestPermissionLocalNotifications() async {
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
     const initializationSettingsAndroid =
@@ -26,7 +28,8 @@ class LocalNotifications {
     );
   }
 
-  static void showLocalNotifications(
+  @override
+  void showLocalNotifications(
       {required int id, String? title, String? body, String? data}) {
     //TODO CUADRAR LO DE LA IMAGEN CON HTTP
     const androidDetails = AndroidNotificationDetails(
