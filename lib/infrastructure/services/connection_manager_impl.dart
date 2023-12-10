@@ -1,8 +1,10 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:sign_in_bloc/application/services/connection_manager.dart';
 
-class ConnectivityChecker {
+class ConnectionManagerImpl extends IConnectionManager {
   Connectivity connectivity = Connectivity();
 
+  @override
   Stream<bool> checkConnectionStream() {
     return connectivity.onConnectivityChanged.map((event) {
       if (event == ConnectivityResult.wifi ||
@@ -14,10 +16,11 @@ class ConnectivityChecker {
     });
   }
 
+  @override
   Future<bool> checkInitialConnection() async {
-    final result = await connectivity.checkConnectivity();
-    if (result == ConnectivityResult.wifi ||
-        result == ConnectivityResult.mobile) {
+    final connection = await connectivity.checkConnectivity();
+    if (connection == ConnectivityResult.wifi ||
+        connection == ConnectivityResult.mobile) {
       return true;
     } else {
       return false;

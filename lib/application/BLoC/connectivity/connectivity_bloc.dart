@@ -1,21 +1,21 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:sign_in_bloc/infrastructure/services/connectivity_checker.dart';
+import 'package:sign_in_bloc/application/services/connection_manager.dart';
 
 part 'connectivity_event.dart';
 part 'connectivity_state.dart';
 
 class ConnectivityBloc extends Bloc<ConnectivityEvent, ConnectivityState> {
-  final ConnectivityChecker connectivityChecker;
-  ConnectivityBloc({required this.connectivityChecker})
+  final IConnectionManager connectionManager;
+  ConnectivityBloc({required this.connectionManager})
       : super(const ConnectivityInitialState()) {
-    on<ConnectivityInitialCheckRequested>(checkInitialConnection);
-    on<ConnectivityCheckRequested>(checkConnection);
+    on<ConnectivityInitialCheckRequested>(_checkInitialConnection);
+    on<ConnectivityCheckRequested>(_checkConnection);
   }
 
-  Future<void> checkConnection(
+  Future<void> _checkConnection(
       ConnectivityCheckRequested event, Emitter<ConnectivityState> emit) async {
-    final subscriptionSteam = connectivityChecker.checkConnectionStream();
+    final subscriptionSteam = connectionManager.checkConnectionStream();
     await for (final isConnected in subscriptionSteam) {
       isConnected
           ? emit(
@@ -24,9 +24,9 @@ class ConnectivityBloc extends Bloc<ConnectivityEvent, ConnectivityState> {
     }
   }
 
-  Future<void> checkInitialConnection(ConnectivityInitialCheckRequested event,
+  Future<void> _checkInitialConnection(ConnectivityInitialCheckRequested event,
       Emitter<ConnectivityState> emit) async {
-    final bool isConnected = await connectivityChecker.checkInitialConnection();
+    final bool isConnected = await connectionManager.checkInitialConnection();
     isConnected
         ? emit(ConnectedState(willNeedReconnection: state.willNeedReconnection))
         : emit(const NotConnectedState());

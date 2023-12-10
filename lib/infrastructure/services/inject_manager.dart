@@ -7,14 +7,13 @@ import 'package:sign_in_bloc/application/useCases/artist/get_trending_artists_us
 import 'package:sign_in_bloc/application/useCases/playlist/get_trending_playlists_use_case.dart';
 import 'package:sign_in_bloc/application/useCases/song/get_trending_songs_use_case.dart';
 import 'package:sign_in_bloc/application/useCases/user/is_authenticated.dart';
-import 'package:sign_in_bloc/domain/user/repository/user_repository.dart';
 import 'package:sign_in_bloc/infrastructure/repositories/album/album_repository_impl.dart';
 import 'package:sign_in_bloc/infrastructure/repositories/artist/artist_repository_impl.dart';
 import 'package:sign_in_bloc/infrastructure/repositories/promotional_banner/promotional_banner_repository_impl.dart';
 import 'package:sign_in_bloc/infrastructure/repositories/song/song_repository_impl.dart';
-import 'package:sign_in_bloc/infrastructure/services/connectivity_checker.dart';
+import 'package:sign_in_bloc/infrastructure/services/api_connection_manager_impl.dart';
+import 'package:sign_in_bloc/infrastructure/services/connection_manager_impl.dart';
 import 'package:sign_in_bloc/infrastructure/services/local_storage_impl.dart';
-import 'package:sign_in_bloc/infrastructure/services/network_manager.dart';
 import '../../application/BLoC/auth/auth_bloc.dart';
 import '../../application/BLoC/connectivity/connectivity_bloc.dart';
 import '../../application/BLoC/logInSubs/log_in_subscriber_bloc.dart';
@@ -23,23 +22,30 @@ import '../../application/useCases/promotional_banner/get_promotional_banner_use
 import '../../application/useCases/user/log_in_use_case.dart';
 import '../presentation/config/router/app_router.dart';
 import '../repositories/playlist/playlist_repository_impl.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../repositories/user/user_repository_impl.dart';
 
 class InjectManager {
   static Future<void> initialized() async {
     //services
     WidgetsFlutterBinding.ensureInitialized();
-    final networkManager =
-        NetworkManager(); //TODO:a esto hay que hacerle la interfaz
+    await dotenv.load(fileName: ".env");
+    final apiConnectionManagerImpl = ApiConnectionManagerImpl(
+        baseUrl:
+            dotenv.env['API_URL']!); //TODO:a esto hay que hacerle la interfaz
     //repositories
-    final userRepository = UserRepositoryImpl(networkManager: networkManager);
-    final promotionalBannerRepository =
-        PromotionalBannerRepositoryImpl(networkManager: networkManager);
+    final userRepository =
+        UserRepositoryImpl(apiConnectionManager: apiConnectionManagerImpl);
+    final promotionalBannerRepository = PromotionalBannerRepositoryImpl(
+        apiconnectionManager: apiConnectionManagerImpl);
     final playlistRepository =
-        PlaylistRepositoryImpl(networkManager: networkManager);
-    final albumRepository = AlbumRepositoryImpl(networkManager: networkManager);
+        PlaylistRepositoryImpl(apiConnectionManager: apiConnectionManagerImpl);
+    final albumRepository =
+        AlbumRepositoryImpl(apiConnectionManager: apiConnectionManagerImpl);
     final artistRepository =
-        ArtistRepositoryImpl(networkManager: networkManager);
-    final songRepository = SongRepositoryImpl(networkManager: networkManager);
+        ArtistRepositoryImpl(apiConnectionManager: apiConnectionManagerImpl);
+    final songRepository =
+        SongRepositoryImpl(apiConnectionManager: apiConnectionManagerImpl);
     final sharedPreferences = await SharedPreferences.getInstance();
     final localStorage = LocalStorageImpl(prefs: sharedPreferences);
     //usecases
@@ -75,16 +81,12 @@ class InjectManager {
     final authBloc = getIt.get<AuthBloc>();
 
     getIt.registerSingleton<ConnectivityBloc>(
-        ConnectivityBloc(connectivityChecker: ConnectivityChecker()));
+        ConnectivityBloc(connectionManager: ConnectionManagerImpl()));
     //para chekear el estado de la autenticacion
     authBloc.add(UserAuthenticatedEvent());
     final authGuard = AuthRouteGuard(authBloc: authBloc);
     final subscriptionGuard = SubscriptionRouteGuard(authBloc: authBloc);
     getIt.registerSingleton<AppNavigator>(AppNavigator(
         authRouteGuard: authGuard, subscriptionRouteGuard: subscriptionGuard));
-
-    final ConnectivityChecker connectivityChecker = ConnectivityChecker();
-    await connectivityChecker.checkInitialConnection();
-    connectivityChecker.checkConnectionStream();
   }
 }

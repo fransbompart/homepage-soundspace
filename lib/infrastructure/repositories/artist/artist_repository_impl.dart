@@ -1,17 +1,20 @@
 import 'package:sign_in_bloc/domain/artist/repository/artist_repository.dart';
 import 'package:sign_in_bloc/infrastructure/mappers/artist/artist_mapper.dart';
-import 'package:sign_in_bloc/infrastructure/services/network_manager.dart';
+import 'package:sign_in_bloc/infrastructure/services/api_connection_manager.dart';
 import 'package:sign_in_bloc/commons/result.dart';
 import '../../../domain/artist/artist.dart';
 
 class ArtistRepositoryImpl extends ArtistRepository {
-  final NetworkManager networkManager;
+  final IApiConnectionManager _apiConnectionManager;
 
-  ArtistRepositoryImpl({required this.networkManager}); //mejorar esto
+  ArtistRepositoryImpl({required IApiConnectionManager apiConnectionManager})
+      : _apiConnectionManager = apiConnectionManager;
+  //mejorar esto
 
   @override
   Future<Result<List<Artist>>> getTrendingArtists() async {
-    final result = await networkManager.getRequest('artists/top_artists');
+    final result =
+        await _apiConnectionManager.request('artists/top_artists', 'GET');
     if (result.hasValue()) {
       return Result(
           value: ArtistMapper.fromJsonList(result.value.data['data']),

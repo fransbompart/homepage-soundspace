@@ -17,7 +17,7 @@ class LocalStorageImpl extends LocalStorage {
   }
 
   @override
-  void setKeyValue(String key, String value) {
-    _prefs.setString(key, value);
+  Future<void> setKeyValue(String key, String value) async {
+    await _prefs.setString(key, value);
   }
 }

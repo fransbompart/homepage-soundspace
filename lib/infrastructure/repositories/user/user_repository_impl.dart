@@ -1,7 +1,26 @@
-import 'package:sign_in_bloc/commons/result.dart';
-import 'package:sign_in_bloc/domain/user/user.dart';
+import 'package:sign_in_bloc/infrastructure/services/api_connection_manager.dart';
 
-abstract class UserRepository {
-  Future<Result<User>> logInUser(String number);
-  //Future<Result<User>> signUpUser(User newUser);
+import '../../../commons/result.dart';
+import '../../../domain/user/repository/user_repository.dart';
+import '../../../domain/user/user.dart';
+import '../../../infrastructure/mappers/user/user_mapper.dart';
+
+class UserRepositoryImpl extends UserRepository {
+  final IApiConnectionManager _apiConnectionManager;
+
+  UserRepositoryImpl({required IApiConnectionManager apiConnectionManager})
+      : _apiConnectionManager = apiConnectionManager;
+
+  @override
+  Future<Result<User>> logInUser(String number) async {
+    final response = await _apiConnectionManager
+        .request('auth/login', 'POST', body: {'number': number});
+
+    if (response.hasValue()) {
+      return Result(
+          value: UserMapper.fromJson(response.value.data['data']), error: null);
+    } else {
+      return Result(value: null, error: Error());
+    }
+  }
 }

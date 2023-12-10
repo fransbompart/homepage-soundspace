@@ -70,11 +70,8 @@ class _RegisterForm extends StatelessWidget {
     final getIt = GetIt.instance;
     final registerBloc = getIt.get<LogInSubscriberBloc>();
     final appNavigator = getIt.get<AppNavigator>();
-
-    return BlocListener<LogInSubscriberBloc, LogInSubscriberState>(
-        listener: (context, state) {
-      if (state.formStatus == FormStatus.success) {
-        getIt.get<AuthBloc>().add(UserAuthenticatedEvent());
+    return BlocListener<AuthBloc, AuthState>(listener: (context, state) {
+      if (state is Authenticated) {
         appNavigator.navigateTo('/home');
       }
     }, child: BlocBuilder<LogInSubscriberBloc, LogInSubscriberState>(
@@ -106,10 +103,10 @@ class _RegisterForm extends StatelessWidget {
             const SizedBox(height: 15),
 
             if (state.formStatus != FormStatus.posting)
-              MyButton(
-                  onTap: () => registerBloc.add(LogInSubscriberSubmitted(
-                      phone:
-                          state.phone.value))), //TODO: hacer el boton dinamico
+              MyButton(onTap: () {
+                registerBloc
+                    .add(LogInSubscriberSubmitted(phone: state.phone.value));
+              }), //TODO: hacer el boton dinamico
             // Suscríbete text
             const SizedBox(height: 65),
             const Row(

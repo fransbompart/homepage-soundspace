@@ -16,7 +16,7 @@ abstract class IPage extends StatelessWidget {
         BlocListener<ConnectivityBloc, ConnectivityState>(
           listener: (context, state) {
             if (state is NotConnectedState || state.willNeedReconnection) {
-              //TODO: poner esto como showDialog bonito en un widget privado or something
+              //TODO: poner esto como un showDialog bonito en un widget privado or something
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: state is NotConnectedState

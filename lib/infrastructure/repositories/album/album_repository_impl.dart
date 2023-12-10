@@ -1,18 +1,20 @@
 import 'package:sign_in_bloc/domain/album/repository/album_repository.dart';
 import 'package:sign_in_bloc/infrastructure/mappers/album/album_mapper.dart';
-import 'package:sign_in_bloc/infrastructure/services/network_manager.dart';
+import 'package:sign_in_bloc/infrastructure/services/api_connection_manager.dart';
 import 'package:sign_in_bloc/commons/result.dart';
 import '../../../domain/album/album.dart';
 
 class AlbumRepositoryImpl extends AlbumRepository {
-  final NetworkManager networkManager;
+  final IApiConnectionManager _apiConnectionManager;
 
-  AlbumRepositoryImpl({required this.networkManager}); //mejorar esto
+  AlbumRepositoryImpl({required IApiConnectionManager apiConnectionManager})
+      : _apiConnectionManager = apiConnectionManager;
+//mejorar esto
 
   @override
   Future<Result<List<Album>>> getTrendingAlbums() async {
-    final result =
-        await networkManager.getRequest('playlist/top_playlists?type=album');
+    final result = await _apiConnectionManager.request(
+        'playlist/top_playlists?type=album', 'GET'); //TODO: carefull here
     if (result.hasValue()) {
       return Result(
           value: AlbumMapper.fromJsonList(result.value.data['data']),

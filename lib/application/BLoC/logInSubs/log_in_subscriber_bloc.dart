@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
+import 'package:get_it/get_it.dart';
+import 'package:sign_in_bloc/application/BLoC/auth/auth_bloc.dart';
 
 import '../../../infrastructure/presentation/pages/logIn/inputs/phone.dart';
 import '../../useCases/user/log_in_use_case.dart';
@@ -33,6 +35,7 @@ class LogInSubscriberBloc
       emit(state.copyWith(formStatus: FormStatus.posting));
       final logInResult = await logInUseCase.execute(state.phone.value);
       if (logInResult.hasValue()) {
+        GetIt.instance.get<AuthBloc>().add(UserAuthenticatedEvent());
         emit(state.copyWith(formStatus: FormStatus.success));
       } else {
         emit(state.copyWith(formStatus: FormStatus.failure));
