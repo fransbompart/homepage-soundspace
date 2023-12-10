@@ -2,7 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sign_in_bloc/application/BLoC/notifications/notifications_bloc.dart';
-import 'package:sign_in_bloc/application/BLoC/socket/socket_bloc.dart';
+import 'package:sign_in_bloc/application/BLoC/sockets/socket_bloc.dart';
 import 'package:sign_in_bloc/infrastructure/services/local_notifications/local_notifications_impl.dart';
 import 'package:sign_in_bloc/infrastructure/presentation/config/app_theme.dart';
 import 'package:sign_in_bloc/infrastructure/presentation/config/background.dart';

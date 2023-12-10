@@ -9,7 +9,6 @@ class NotificationsState extends Equatable {
 
   NotificationsState copyWith({
     AuthorizationStatus? status,
-    List<PushMessage>? notifications,
   }) =>
       NotificationsState(
         status: status ?? this.status,

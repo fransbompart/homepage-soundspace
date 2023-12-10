@@ -1,22 +1,31 @@
-import 'package:sign_in_bloc/infrastructure/services/socket_client/socket_client.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:sign_in_bloc/infrastructure/services/socket_client/socket_client.dart';
 
 class SocketClientImpl extends SocketClient {
-  late IO.Socket socket;
+  late final IO.Socket socket = IO.io(
+      'http://192.168.1.102:5000',
+      IO.OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
+          .setExtraHeaders({'foo': 'bar'}) // optional
+          .build());
 
   @override
   void inicializeSocket() {
-    socket = IO.io(
-        'http://192.168.1.106:5000',
-        IO.OptionBuilder()
-            .setTransports(['websocket']) // for Flutter or Dart VM
-            .setExtraHeaders({'foo': 'bar'}) // optional
-            .build());
     socket.connect();
     socket.onConnect((_) {
       print('connect');
-      socket.emit('msg', 'test');
     });
+  }
+
+  void handleReceive(data, chunck, state) {
+    print(data);
+    chunck.secuence = data['secuence'];
+    chunck.data = data['payload'];
+    //emit(state.copyWith(buffer: [chunck, ...state.buffer]));
+  }
+
+  @override
+  void sendMessage(String message) {
+    socket.emit('idSong', message);
   }
 
   @override

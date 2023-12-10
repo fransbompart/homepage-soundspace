@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sign_in_bloc/application/BLoC/sockets/socket_bloc.dart';
 
 class MusicPlayer extends StatelessWidget {
   const MusicPlayer({super.key});
 
+  void sendIdSong(BuildContext context, [String idSong = '']) {
+    context.read<SocketBloc>().add(SocketSend(idSong));
+  }
+
   @override
   Widget build(BuildContext context) {
+    final len =
+        context.select((SocketBloc socketBloc) => socketBloc.state.buffer);
     return Container(
       height: 60,
       width: double.infinity,
@@ -30,7 +38,7 @@ class MusicPlayer extends StatelessWidget {
                   padding: const EdgeInsets.all(14),
                   child: Column(children: [
                     Text(
-                      'Artist',
+                      len.length.toString(),
                       style: Theme.of(context).textTheme.bodyMedium,
                     )
                   ]),
@@ -46,9 +54,12 @@ class MusicPlayer extends StatelessWidget {
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       const SizedBox(width: 6),
-                      const Icon(
-                        Icons.play_arrow_sharp,
-                        color: Color(0xff1de1ee),
+                      GestureDetector(
+                        onTap: () => sendIdSong(context, 'cancion123'),
+                        child: const Icon(
+                          Icons.play_arrow_sharp,
+                          color: Color(0xff1de1ee),
+                        ),
                       )
                     ],
                   ),
