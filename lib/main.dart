@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sign_in_bloc/application/BLoC/connectivity/connectivity_bloc.dart';
+import 'package:sign_in_bloc/application/BLoC/notifications/notifications_bloc.dart';
 import 'package:sign_in_bloc/application/BLoC/trendings/trendings_bloc.dart';
 import 'package:sign_in_bloc/infrastructure/presentation/config/theme/app_theme.dart';
 import 'package:sign_in_bloc/infrastructure/services/inject_manager.dart';
@@ -44,6 +45,9 @@ class MyApp extends StatelessWidget {
             return getIt.get<LogInSubscriberBloc>();
           },
         ),
+        BlocProvider(
+          create: (context) => getIt.get<NotificationsBloc>(),
+        )
       ],
       child: MaterialApp.router(
         title: 'SoundSpace', //TODO: mejorar con las .env
