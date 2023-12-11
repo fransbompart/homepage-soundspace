@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sign_in_bloc/application/BLoC/auth/auth_bloc.dart';
+import 'package:sign_in_bloc/commons/error.dart';
 
 import '../../../infrastructure/presentation/pages/logIn/inputs/phone.dart';
 import '../../useCases/user/log_in_use_case.dart';
@@ -37,6 +38,8 @@ class LogInSubscriberBloc
       if (logInResult.hasValue()) {
         GetIt.instance.get<AuthBloc>().add(UserAuthenticatedEvent());
         emit(state.copyWith(formStatus: FormStatus.success));
+      } else if (logInResult.error! is NoAuthoizedError) {
+        emit(state.copyWith(formStatus: FormStatus.invalid));
       } else {
         emit(state.copyWith(formStatus: FormStatus.failure));
       }

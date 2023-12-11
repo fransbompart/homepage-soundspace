@@ -17,10 +17,10 @@ class UserRepositoryImpl extends UserRepository {
         .request('auth/login', 'POST', body: {'number': number});
 
     if (response.hasValue()) {
-      return Result(
+      return Result<User>(
           value: UserMapper.fromJson(response.value.data['data']), error: null);
     } else {
-      return Result(value: null, error: Error());
+      return Result<User>(value: null, error: response.error);
     }
   }
 }

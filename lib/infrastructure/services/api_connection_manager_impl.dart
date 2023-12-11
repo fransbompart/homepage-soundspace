@@ -36,7 +36,7 @@ class ApiConnectionManagerImpl extends IApiConnectionManager {
         return ServerError();
       case DioExceptionType.badResponse:
         final statusCode = e.response?.statusCode;
-        if (statusCode == 401) {
+        if (statusCode == 404) {
           return NoAuthoizedError();
         } else {
           return Error();
