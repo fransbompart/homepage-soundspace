@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sign_in_bloc/application/BLoC/gps/gps_bloc.dart';
 import 'package:sign_in_bloc/application/BLoC/notifications/notifications_bloc.dart';
 import 'package:sign_in_bloc/application/BLoC/player/player_bloc.dart';
 import 'package:sign_in_bloc/application/useCases/album/get_trending_albums_use_case.dart';
@@ -98,6 +99,7 @@ class InjectManager {
     getIt.registerSingleton<AuthBloc>(
         AuthBloc(isAuthenticatedUseCase: isAuthenticatedUseCase));
     getIt.registerSingleton<PlayerBloc>(PlayerBloc());
+    getIt.registerSingleton<GpsBloc>(GpsBloc());
     getIt.registerSingleton<LogInSubscriberBloc>(
         LogInSubscriberBloc(logInUseCase: logInUseCase));
     final authBloc = getIt.get<AuthBloc>();
