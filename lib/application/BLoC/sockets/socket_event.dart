@@ -9,8 +9,8 @@ class SocketConnected extends SocketEvent {}
 class SocketDisconnected extends SocketEvent {}
 
 class SocketReceive extends SocketEvent {
-  final SocketChunck buffer;
-  const SocketReceive(this.buffer);
+  final SocketChunck chunck;
+  const SocketReceive(this.chunck);
 }
 
 class SocketSend extends SocketEvent {

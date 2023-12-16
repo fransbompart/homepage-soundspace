@@ -9,7 +9,6 @@ part 'socket_state.dart';
 
 class SocketBloc extends Bloc<SocketEvent, SocketState> {
   SocketClient socketClient;
-  List<SocketChunck> buffer = [];
 
   SocketBloc({required this.socketClient}) : super(const SocketState()) {
     on<SocketSend>(_sendIdSong);
@@ -21,18 +20,21 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
     socketClient.sendMessage(event.idSong);
   }
 
-  void _receiveChunck(SocketReceive event, Emitter<SocketState> emit) {
-    emit(state.copyWith(buffer: [event.buffer, ...state.buffer]));
+  Future<void> _receiveChunck(
+      SocketReceive event, Emitter<SocketState> emit) async {
+    emit(state.copyWith(buffer: [...state.buffer, event.chunck]));
+    state.buffer;
   }
 
-  void _receiveBackgroundChunck() {
+  Future<void> _receiveBackgroundChunck() async {
     SocketChunck chunck = SocketChunck(secuence: '', data: 'data');
     socketClient.getSocket().on(
         'chunck',
         (data) => {
+              print(data['secuence']),
               chunck.secuence = data['secuence'],
               chunck.data = data['payload'],
-              add(SocketReceive(chunck)),
+              if (chunck.secuence != '') add(SocketReceive(chunck)),
             });
   }
 }

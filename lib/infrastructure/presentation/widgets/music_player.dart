@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:sign_in_bloc/application/BLoC/sockets/socket_bloc.dart';
 
 class MusicPlayer extends StatelessWidget {
@@ -13,6 +14,8 @@ class MusicPlayer extends StatelessWidget {
   Widget build(BuildContext context) {
     final len =
         context.select((SocketBloc socketBloc) => socketBloc.state.buffer);
+    final player = AudioPlayer();
+
     return Container(
       height: 60,
       width: double.infinity,
