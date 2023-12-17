@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sign_in_bloc/application/BLoC/auth/auth_bloc.dart';
+import 'package:sign_in_bloc/application/useCases/user/subscribe_use_case.dart';
 import 'package:sign_in_bloc/commons/error.dart';
 
 import '../../../infrastructure/presentation/pages/logIn/inputs/phone.dart';
@@ -14,10 +15,12 @@ part 'log_in_subscriber_state.dart';
 class LogInSubscriberBloc
     extends Bloc<LogInSubscriberEvent, LogInSubscriberState> {
   final LogInUseCase logInUseCase;
-  LogInSubscriberBloc({required this.logInUseCase})
+  final SignUpUseCase signUpUseCase;
+  LogInSubscriberBloc({required this.logInUseCase, required this.signUpUseCase})
       : super(const LogInSubscriberState()) {
     on<LogInSubscriberSubmitted>(_onSubmited);
     on<LogInSubscriberPhoneChanged>(_phoneChanged);
+    on<OperatorSubmittedEvent>(_onSubscribe);
   }
 
   Future<void> _onSubmited(
@@ -35,6 +38,33 @@ class LogInSubscriberBloc
     if (isValid) {
       emit(state.copyWith(formStatus: FormStatus.posting));
       final logInResult = await logInUseCase.execute(state.phone.value);
+      if (logInResult.hasValue()) {
+        GetIt.instance.get<AuthBloc>().add(UserAuthenticatedEvent());
+        emit(state.copyWith(formStatus: FormStatus.success));
+      } else if (logInResult.error! is NoAuthoizedError) {
+        emit(state.copyWith(formStatus: FormStatus.invalid));
+      } else {
+        emit(state.copyWith(formStatus: FormStatus.failure));
+      }
+    }
+  }
+
+  Future<void> _onSubscribe(
+      LogInSubscriberEvent event, Emitter<LogInSubscriberState> emit) async {
+    final isValid = Formz.validate([state.phone]);
+
+    emit(
+      state.copyWith(
+        formStatus: FormStatus.validating,
+        phone: Phone.dirty(state.phone.value),
+        isValid: isValid,
+        operator: state.operator
+      ),
+    );
+
+    if (isValid) {
+      emit(state.copyWith(formStatus: FormStatus.posting));
+      final logInResult = await signUpUseCase.execute(state.phone.value, state.operator);
       if (logInResult.hasValue()) {
         GetIt.instance.get<AuthBloc>().add(UserAuthenticatedEvent());
         emit(state.copyWith(formStatus: FormStatus.success));

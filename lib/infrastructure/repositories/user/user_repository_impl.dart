@@ -27,7 +27,7 @@ class UserRepositoryImpl extends UserRepository {
   @override
   Future<Result<User>> signUpUser(String number, String operator) async {
     final response = await _apiConnectionManager
-        .request('auth/validate_operator', 'POST', body: {'number': number, 'operadoraID': operator});
+        .request('auth/validate_operator', 'POST', body: {'number': number, 'chanelId': operator});
 
     if (response.hasValue()) {
       return Result<User>(

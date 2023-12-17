@@ -11,6 +11,7 @@ import 'package:sign_in_bloc/application/useCases/artist/get_trending_artists_us
 import 'package:sign_in_bloc/application/useCases/playlist/get_trending_playlists_use_case.dart';
 import 'package:sign_in_bloc/application/useCases/song/get_trending_songs_use_case.dart';
 import 'package:sign_in_bloc/application/useCases/user/is_authenticated.dart';
+import 'package:sign_in_bloc/application/useCases/user/subscribe_use_case.dart';
 import 'package:sign_in_bloc/infrastructure/repositories/album/album_repository_impl.dart';
 import 'package:sign_in_bloc/infrastructure/repositories/artist/artist_repository_impl.dart';
 import 'package:sign_in_bloc/infrastructure/repositories/promotional_banner/promotional_banner_repository_impl.dart';
@@ -74,6 +75,7 @@ class InjectManager {
     //usecases
     final LogInUseCase logInUseCase = LogInUseCase(
         userRepository: userRepository, localStorage: localStorage);
+    final SignUpUseCase signUpUseCase = SignUpUseCase(userRepository: userRepository, localStorage: localStorage);
     final GetPromotionalBannerUseCase getPromotionalBannerUseCase =
         GetPromotionalBannerUseCase(
             promotionalBannerRepository: promotionalBannerRepository);
@@ -101,7 +103,7 @@ class InjectManager {
     getIt.registerSingleton<PlayerBloc>(PlayerBloc());
     getIt.registerSingleton<GpsBloc>(GpsBloc());
     getIt.registerSingleton<LogInSubscriberBloc>(
-        LogInSubscriberBloc(logInUseCase: logInUseCase));
+        LogInSubscriberBloc(logInUseCase: logInUseCase, signUpUseCase: signUpUseCase));
     final authBloc = getIt.get<AuthBloc>();
     getIt.registerSingleton<ConnectivityBloc>(
         ConnectivityBloc(connectionManager: ConnectionManagerImpl()));
