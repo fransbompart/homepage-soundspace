@@ -64,11 +64,11 @@ class LogInSubscriberBloc
 
     if (isValid) {
       emit(state.copyWith(formStatus: FormStatus.posting));
-      final logInResult = await signUpUseCase.execute(state.phone.value, state.operator);
-      if (logInResult.hasValue()) {
+      final signUpResult = await signUpUseCase.execute(state.phone.value, state.operator);
+      if (signUpResult.hasValue()) {
         GetIt.instance.get<AuthBloc>().add(UserAuthenticatedEvent());
         emit(state.copyWith(formStatus: FormStatus.success));
-      } else if (logInResult.error! is NoAuthoizedError) {
+      } else if (signUpResult.error! is NoAuthoizedError) {
         emit(state.copyWith(formStatus: FormStatus.invalid));
       } else {
         emit(state.copyWith(formStatus: FormStatus.failure));
