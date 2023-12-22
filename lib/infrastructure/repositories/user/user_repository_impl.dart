@@ -23,4 +23,18 @@ class UserRepositoryImpl extends UserRepository {
       return Result<User>(value: null, error: response.error);
     }
   }
+
+  //! ES LITERALMENTE LO MISMO, CAPAZ CAMBIAR EL NOMBRE PARA NO ESTAR REPITIENDO?
+  @override
+  Future<Result<User>> fetchUserProfileData() async {
+    final response =
+        await _apiConnectionManager.request('user/profileData', 'GET');
+
+    if (response.hasValue()) {
+      return Result<User>(
+          value: UserMapper.fromJson(response.value.data['data']), error: null);
+    } else {
+      return Result<User>(value: null, error: response.error);
+    }
+  }
 }

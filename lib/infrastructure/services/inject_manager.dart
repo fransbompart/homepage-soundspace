@@ -5,10 +5,12 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_bloc/application/BLoC/notifications/notifications_bloc.dart';
 import 'package:sign_in_bloc/application/BLoC/player/player_bloc.dart';
+import 'package:sign_in_bloc/application/BLoC/user/user_bloc.dart';
 import 'package:sign_in_bloc/application/useCases/album/get_trending_albums_use_case.dart';
 import 'package:sign_in_bloc/application/useCases/artist/get_trending_artists_use_case.dart';
 import 'package:sign_in_bloc/application/useCases/playlist/get_trending_playlists_use_case.dart';
 import 'package:sign_in_bloc/application/useCases/song/get_trending_songs_use_case.dart';
+import 'package:sign_in_bloc/application/useCases/user/get_user_profile_data_use_case.dart';
 import 'package:sign_in_bloc/application/useCases/user/is_authenticated.dart';
 import 'package:sign_in_bloc/infrastructure/repositories/album/album_repository_impl.dart';
 import 'package:sign_in_bloc/infrastructure/repositories/artist/artist_repository_impl.dart';
@@ -71,6 +73,9 @@ class InjectManager {
     final sharedPreferences = await SharedPreferences.getInstance();
     final localStorage = LocalStorageImpl(prefs: sharedPreferences);
     //usecases
+    final FetchUserProfileDataUseCase fetchUserProfileDataUseCase =
+        FetchUserProfileDataUseCase(
+            userRepository: userRepository, localStorage: localStorage);
     final LogInUseCase logInUseCase = LogInUseCase(
         userRepository: userRepository, localStorage: localStorage);
     final GetPromotionalBannerUseCase getPromotionalBannerUseCase =
@@ -98,6 +103,8 @@ class InjectManager {
     getIt.registerSingleton<AuthBloc>(
         AuthBloc(isAuthenticatedUseCase: isAuthenticatedUseCase));
     getIt.registerSingleton<PlayerBloc>(PlayerBloc());
+    getIt.registerSingleton<UserBloc>(
+        UserBloc(fetchUserProfileDataUseCase: fetchUserProfileDataUseCase));
     getIt.registerSingleton<LogInSubscriberBloc>(
         LogInSubscriberBloc(logInUseCase: logInUseCase));
     final authBloc = getIt.get<AuthBloc>();

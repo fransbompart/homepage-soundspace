@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
+import 'package:sign_in_bloc/application/BLoC/user/user_bloc.dart';
 import 'package:sign_in_bloc/infrastructure/presentation/shared_widgets/ipage.dart';
 import 'package:sign_in_bloc/application/BLoC/player/player_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../domain/user/user.dart';
 import '../../shared_widgets/music_player.dart';
 
 final _formKey = GlobalKey<FormState>();
+
 const List<String> generosList = <String>[
   'Masculino',
   'Femenino',
@@ -18,29 +22,23 @@ class UserProfilePage extends IPage {
 
   @override
   Widget child(BuildContext context) {
-    //final userBloc = GetIt.instance.get<userBloc>();
-    //userBloc.add(FetchUserEvent());
+    final userBloc = GetIt.instance.get<UserBloc>();
+    userBloc.add(FetchUserProfileDataEvent());
+    User user = userBloc.state.user;
     return BlocBuilder<PlayerBloc, PlayerState>(
         builder: (context, playerState) {
-      //! TODO: bloc de user
-      /*return BlocBuilder<UserBloc, UserState>(
-          builder: (context, userState),{
-            if userState is UserLoaded){*/
-
-      return const SafeArea(
-        child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: SingleChildScrollView(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    ProfileForm(),
-                  ]),
-            )),
-      );
-      //! TODO: bloc user
-      /*}
-          }*/
+      return BlocBuilder<UserBloc, UserState>(builder: (context, userState) {
+        return const SafeArea(
+            child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: SingleChildScrollView(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        ProfileForm(),
+                      ]),
+                )));
+      });
     });
   }
 }
@@ -124,9 +122,11 @@ class _ProfileFormState extends State<ProfileForm> {
                   )
                 ]),
             const SizedBox(height: 30),
+
             //Nombre y apellido
             TextFormField(
               enabled: editProfileData,
+              initialValue: context.watch<UserBloc>().state.user.name?.name,
               style: TextStyle(color: Colors.white),
               decoration: const InputDecoration(
                   hintText: 'Carlos Alonso',
@@ -156,6 +156,7 @@ class _ProfileFormState extends State<ProfileForm> {
             // CORREO
             TextFormField(
               enabled: editProfileData,
+              initialValue: context.watch<UserBloc>().state.user.email?.email,
               style: TextStyle(color: Colors.white),
               decoration: const InputDecoration(
                   hintText: 'CarlosAlonso@CarlosAlonso.Com',
@@ -186,8 +187,16 @@ class _ProfileFormState extends State<ProfileForm> {
                   flex: 1,
                   //FECHA DE NACIMIENTO
                   child: TextFormField(
-                    controller: dateCtl,
+                    //controller: dateCtl,
+                    initialValue: context
+                        .watch<UserBloc>()
+                        .state
+                        .user
+                        .birthdate
+                        ?.date
+                        .toString(),
                     enabled: editProfileData,
+                    readOnly: true,
                     onTap: _showDatePicker,
                     style: const TextStyle(color: Colors.white),
                     decoration: const InputDecoration(
@@ -260,7 +269,8 @@ class _ProfileFormState extends State<ProfileForm> {
                         backgroundColor: MaterialStatePropertyAll<Color>(
                             Color.fromARGB(255, 129, 118, 160)),
                       ),
-                      initialSelection: generosList.first,
+                      initialSelection:
+                          context.watch<UserBloc>().state.user.gender?.gender,
                       onSelected: (String? value) {
                         setState(() {
                           dropDownValue = value!;
